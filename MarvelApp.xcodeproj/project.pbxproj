@@ -18,6 +18,8 @@
 		2D77E8C127B34DAE005340D1 /* MarvelAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D77E8C027B34DAE005340D1 /* MarvelAppUITestsLaunchTests.swift */; };
 		2D77E8CE27B3506A005340D1 /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D77E8CD27B3506A005340D1 /* HomeTableViewController.swift */; };
 		2D77E8D027B3549E005340D1 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D77E8CF27B3549E005340D1 /* DetailViewController.swift */; };
+		2DC231B427B49BFF0085D4E5 /* CharacterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC231B327B49BFF0085D4E5 /* CharacterCell.swift */; };
+		2DC231B627B4A4C30085D4E5 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC231B527B4A4C30085D4E5 /* Character.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,8 @@
 		2D77E8C027B34DAE005340D1 /* MarvelAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarvelAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		2D77E8CD27B3506A005340D1 /* HomeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
 		2D77E8CF27B3549E005340D1 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		2DC231B327B49BFF0085D4E5 /* CharacterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterCell.swift; sourceTree = "<group>"; };
+		2DC231B527B4A4C30085D4E5 /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +109,8 @@
 			children = (
 				2D77E89D27B34DAE005340D1 /* AppDelegate.swift */,
 				2D77E89F27B34DAE005340D1 /* SceneDelegate.swift */,
+				2DC231B527B4A4C30085D4E5 /* Character.swift */,
+				2DC231B327B49BFF0085D4E5 /* CharacterCell.swift */,
 				2D77E8CD27B3506A005340D1 /* HomeTableViewController.swift */,
 				2D77E8CF27B3549E005340D1 /* DetailViewController.swift */,
 				2D77E8A127B34DAE005340D1 /* ViewController.swift */,
@@ -266,7 +272,9 @@
 			files = (
 				2D77E8CE27B3506A005340D1 /* HomeTableViewController.swift in Sources */,
 				2D77E8A227B34DAE005340D1 /* ViewController.swift in Sources */,
+				2DC231B627B4A4C30085D4E5 /* Character.swift in Sources */,
 				2D77E8D027B3549E005340D1 /* DetailViewController.swift in Sources */,
+				2DC231B427B49BFF0085D4E5 /* CharacterCell.swift in Sources */,
 				2D77E89E27B34DAE005340D1 /* AppDelegate.swift in Sources */,
 				2D77E8A027B34DAE005340D1 /* SceneDelegate.swift in Sources */,
 			);
