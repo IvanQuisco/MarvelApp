@@ -19,6 +19,10 @@ struct DataQuery: Codable {
 struct CharacterThumbnail: Codable {
     let path: String
     let `extension`: String
+    
+    var urlString: String {
+        path.replacingOccurrences(of: "http", with: "https") + "." + self.extension
+    }
 }
 
 

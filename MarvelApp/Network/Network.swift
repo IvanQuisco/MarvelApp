@@ -8,6 +8,21 @@
 import Foundation
 import UIKit
 
+typealias Timestamp = () -> Double
+
+enum Constants {
+    static let apiString: String = "gateway.marvel.com/v1/public/"
+}
+
+enum Keys: String {
+    case `public` = "pu"
+    case `private` = "pr"
+}
+
+enum Endpoint: String {
+    case characters
+}
+
 enum HashBuilder {
     static func build(with timestamp: Double) -> String {
         (String(timestamp) + Keys.private.rawValue + Keys.public.rawValue).MD5
@@ -15,12 +30,17 @@ enum HashBuilder {
 }
 
 enum URLBuilder {
-    static func build(endpoint: Endpoint, timestamp: Double) -> URL {
-        let api = Constants.apiString
+    static func build(endpoint: Endpoint, timestamp: Double, limit: Int = 100, offset: Int = 0) -> URL {
+        let api = "https://\(Constants.apiString)"
         let endpoint = endpoint.rawValue
-        let hash = HashBuilder.build(with: timestamp)
-        let urlString = "https://\(api)\(endpoint)?ts=\(timestamp)&apikey=\(Keys.public.rawValue)&hash=\(hash)"
-        print("IQ \(urlString)")
+        let hash = "&hash=\(HashBuilder.build(with: timestamp))"
+        let timestamp = "?ts=\(timestamp)"
+        let publicKey = "&apikey=\(Keys.public.rawValue)"
+        let limit = "&limit=\(limit)"
+        let offset = "&offset=\(offset)"
+        
+        let urlString = api + endpoint + timestamp + publicKey + hash + limit + offset
+        
         guard
             let url = URL(string: urlString)
         else {
@@ -31,32 +51,46 @@ enum URLBuilder {
     }
 }
 
-typealias Timestamp = () -> Double
-
-enum Keys: String {
-    case `public` = "pu"
-    case `private` = "pr"
+struct CodableFetcher<C: Codable> {
+    static func fetch(from url: URL, completion: @escaping (Result<C?,Swift.Error>) -> Void) {
+        DataFetcher.fetch(from: url) { result in
+            switch result {
+            case let .success(data):
+                let model = try? JSONDecoder().decode(C.self, from: data)
+                completion(.success(model))
+            case let .failure(error):
+                completion(.failure(error))
+            }
+        }
+    }
 }
 
-enum Constants {
-    static let apiString: String = "gateway.marvel.com/v1/public/"
+struct DataFetcher {
+    static func fetch(from url: URL, completion: @escaping (Result<Data,Swift.Error>) -> ()) {
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            if let error = error {
+                completion(.failure(error))
+            }
+            if let data = data {
+                completion(.success(data))
+            }
+        }
+        .resume()
+    }
 }
 
-enum Endpoint: String {
-    case characters
-}
 
 enum Network {
     static func fetchCharacters(
         timestamp: Timestamp = { Date().timeIntervalSince1970 },
-        completion: @escaping (Result<[CharacterNetworkModel], Swift.Error>) -> Void
+        completion: @escaping (Result<[CharacterUIModel], Swift.Error>) -> Void
     ) {
         let url = URLBuilder.build(endpoint: .characters, timestamp: timestamp())
-        DataTask.fetch(from: url) { result in
+        CodableFetcher<Query>.fetch(from: url) { result in
             switch result {
-            case let .success(data):
-                let query = try? JSONDecoder().decode(Query.self, from: data) as Query
-                completion(.success(query?.data.results ?? []))
+            case let .success(query):
+                let models = query?.data.results.compactMap(CharacterUIModel.init) ?? []
+                completion(.success(models))
             case let .failure(error):
                 completion(.failure(error))
             }
@@ -67,28 +101,12 @@ enum Network {
         data: CharacterThumbnail,
         completion: @escaping (Result<Data, Swift.Error>) -> ()
     ) {
-        let urlString = data.path.replacingOccurrences(of: "http", with: "https") + "." + data.extension
-        guard let url = URL(string: urlString) else {
+        guard let url = URL(string: data.urlString) else {
             struct InvalidURL: Error {}
             completion(.failure(InvalidURL()))
             return
         }
         
-        DataTask.fetch(from: url, completion: completion)
-    }
-}
-
-struct DataTask {
-    static func fetch(from url: URL, completion: @escaping (Result<Data,Swift.Error>) -> ()) {
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            if let data = data {
-                completion(.success(data))
-            }
-        }
-        .resume()
+        DataFetcher.fetch(from: url, completion: completion)
     }
 }

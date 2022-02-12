@@ -12,33 +12,25 @@ class CharacterCell: UITableViewCell {
         didSet {
             self.titleLabelView.text = character?.name
             self.customImageView.image = character?.image?.withRenderingMode(.alwaysOriginal)
-            self.subtitleLabelView.text = character?.description
         }
     }
         
     let customImageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleToFill
+        view.contentMode = .scaleAspectFit
         view.layer.masksToBounds = true
-        view.layer.cornerRadius = 20
+        view.layer.cornerRadius = 15
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     let titleLabelView: UILabel = {
         let view = UILabel()
-        view.font = .boldSystemFont(ofSize: 25)
+        view.numberOfLines = 0
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    let subtitleLabelView: UILabel = {
-        let view = UILabel()
-        view.font = .systemFont(ofSize: 14, weight: .medium)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layout()
@@ -54,14 +46,8 @@ class CharacterCell: UITableViewCell {
         addSubview(titleLabelView)
         titleLabelView.leadingAnchor.constraint(equalTo: customImageView.trailingAnchor, constant: 10).isActive = true
         titleLabelView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
-        titleLabelView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -10).isActive = true
-        titleLabelView.heightAnchor.constraint(equalToConstant: 26).isActive = true
-        
-        addSubview(subtitleLabelView)
-        subtitleLabelView.topAnchor.constraint(equalTo: titleLabelView.bottomAnchor, constant: 0).isActive = true
-        subtitleLabelView.heightAnchor.constraint(equalToConstant: 15).isActive = true
-        subtitleLabelView.leadingAnchor.constraint(equalTo: customImageView.trailingAnchor, constant: 10).isActive = true
-        subtitleLabelView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
+        titleLabelView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        titleLabelView.heightAnchor.constraint(equalToConstant: 20).isActive = true
     }
     
     required init?(coder: NSCoder) {

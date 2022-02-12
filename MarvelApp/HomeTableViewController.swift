@@ -24,7 +24,7 @@ class HomeTableViewController: UITableViewController {
         
         Network.fetchCharacters { [weak self] result in
             if let self = self, case let .success(value) = result {
-                self.characters = value.map(CharacterUIModel.init)
+                self.characters = value
             }
         }
     }
@@ -55,6 +55,6 @@ extension HomeTableViewController {
 
 extension HomeTableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 150
+        return 100
     }
 }
