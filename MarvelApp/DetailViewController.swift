@@ -8,7 +8,7 @@
 import UIKit
 
 class DetailViewController: UIViewController {
-    var character: Character?
+    var character: CharacterUIModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -8,19 +8,25 @@
 import UIKit
 
 class HomeTableViewController: UITableViewController {
-    let characters: [Character] = [
-        .init(
-            name: "Star Lord",
-            imageName: "starLordImage",
-            team: "Guardians of the Galaxy"
-        )
-    ]
+    var characters: [CharacterUIModel] = [] {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "Characters"
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.tableView.register(CharacterCell.self, forCellReuseIdentifier: "cellId")
+        
+        Network.fetchCharacters { [weak self] result in
+            if let self = self, case let .success(value) = result {
+                self.characters = value.map(CharacterUIModel.init)
+            }
+        }
     }
 }
 
@@ -30,7 +36,7 @@ extension HomeTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return characters.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

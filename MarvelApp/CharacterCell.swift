@@ -8,11 +8,11 @@
 import UIKit
 
 class CharacterCell: UITableViewCell {
-    var character: Character? {
+    var character: CharacterUIModel? {
         didSet {
             self.titleLabelView.text = character?.name
-            self.customImageView.image = .init(named: character?.imageName ?? "")?.withRenderingMode(.alwaysOriginal)
-            self.subtitleLabelView.text = character?.team
+            self.customImageView.image = character?.image?.withRenderingMode(.alwaysOriginal)
+            self.subtitleLabelView.text = character?.description
         }
     }
         
